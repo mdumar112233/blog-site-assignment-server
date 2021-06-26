@@ -20,6 +20,7 @@ app.use(bodyParser.json());
   })
 
 client.connect(err => {
+  const adminCollection = client.db("house-blog-site").collection("admin");
   const BlogCollection = client.db("house-blog-site").collection("blog-content");
 
   app.post('/blogInfo', (req, res) => {
@@ -29,13 +30,26 @@ client.connect(err => {
       res.send(result.insertedCount > 0)
     })
   })
-  
+
+  // app.get('/getAdmin', (req, res) => {
+  //   AdminCollection.find({})
+  //     .toArray((err, documents) => {
+  //         res.send(documents)
+  //     })
+  // })
+    app.get('/getAdmin', (req, res) => {
+    adminCollection.find({})
+    .toArray((err, documents) => {
+      res.send(documents)
+    })
+  })
   app.get('/blogData', (req, res) => {
     BlogCollection.find({})
       .toArray((err, documents) => {
           res.send(documents)
       })
   })
+
 
   app.get('/fullBlog/:id', (req, res) => {
     BlogCollection.find({id: req.params._id})
